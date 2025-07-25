@@ -50,13 +50,34 @@ The project addresses the challenges of traditional, often manual, disease ident
 
 ## 📐 System Architecture
 
-The MONOTARS system is a full-stack application envisioned with a hybrid AI-IoT approach:
+The MONOTARS system is a full-stack application envisioned with a hybrid AI-IoT approach. The simplified diagram below illustrates the core interactions:
+```
+        +-----------------------------+
+        |         User Interface      |
+        |   (React + Tailwind + Chat) |
+        +-------------+---------------+
+                      |
+     Upload Image     |   Ask Query
+                      ↓
+   +---------------------+       +-------------------------+
+   |  TensorFlow.js Model| <---> |        FastAPI           |
+   |  (ResNet50+ViT .json)|      |   (optional for Chat)    |
+   +---------------------+       +-------------------------+
+
+```
+**Explanation of Flow:**
+*   **Image Prediction:** Users `Upload Image` directly to the **TensorFlow.js Model** running client-side within the browser. The prediction results are then displayed in the **User Interface**.
+*   **Text Chat:** User `Ask Query` from the **User Interface** is sent to the **Supabase/FastAPI** backend (Supabase for text-based chat in the current implementation). Replies are sent back from the backend to the UI.
+*   The connection between the **TensorFlow.js Model** and **Supabase/FastAPI** in the diagram signifies that while the image model runs in the browser, the overall project envisions a comprehensive system where the backend could provide additional services related to model management, data storage, or other AI tasks.
+
+**Components Breakdown:**
 
 *   **Frontend:** A responsive web interface built with React and TypeScript, handling user interaction, image uploads, displaying predictions, and integrating multilingual chat.
 *   **Backend (AI Prediction API - *Architectural*):** A FastAPI-based Python backend designed for AI-based image classification and data flow. While the primary image inference for the *current frontend code* is client-side, this backend component is integral to the overall system's robust architecture and for server-side deployments/testing.
 *   **Backend (Text Chat - *External*):** Supabase Functions are used for handling the text-based queries to the chatbot.
 *   **IoT Module (Future/Architectural):** Raspberry Pi and sensors for environmental data collection.
 *   **Hybrid Deep Learning Model:** Trained models (CNNs + ViTs) reside either on the edge device, a central backend, or are converted for client-side use.
+
 
 ## 🛠️ Tech Stack
 
